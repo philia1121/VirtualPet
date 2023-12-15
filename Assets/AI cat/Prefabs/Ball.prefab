@@ -86,3 +86,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 730c228707e18c44cafc746e40c62bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boundary:
+  - {x: 14.6, y: 8.2}
+  - {x: 17, y: 11}
