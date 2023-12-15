@@ -45,7 +45,7 @@ public class CatKneadState : CatBaseState
         if(setTimer & _ctx.TimeUp & !placing) // place the cushion
         {
             placing = true;
-            cushionPos = new Vector3(Random.Range(-8.6f, 8.6f), Random.Range(-5.33f, 3f), 0);
+            cushionPos = new Vector3(Random.Range(_ctx.ObjectBoundary[0].position.x, _ctx.ObjectBoundary[1].position.x), Random.Range(_ctx.ObjectBoundary[0].position.y, _ctx.ObjectBoundary[1].position.y), _ctx.CatTransform.position.z);
             ignoreCushion = (Random.Range(0, 1f) < 0.1f)? true : false; // slight chance that cat will ignore the cushion
             _ctx.PlaceCushion(cushionPos);
 

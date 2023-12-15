@@ -38,6 +38,10 @@ public class CatIdleState : CatBaseState
         {
             next = 2;
         }
+        else if( _ctx.FoodOnStage)
+        {
+            next = 3;
+        }
 
         if(_ctx.ManualControl)
         {
@@ -75,6 +79,9 @@ public class CatIdleState : CatBaseState
                 break;
             case <= 2f:
                 SwitchState(_factory.Observe());
+                break;
+            case <= 3f:
+                SwitchState(_factory.Eat());
                 break;
             default:
                 break;

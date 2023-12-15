@@ -46,6 +46,7 @@ public class CatStateMachine : MonoBehaviour
     public GameObject Poo;
     public GameObject Cushion;
     public Transform[] ObjectParents = new Transform[2];
+    public Transform[] ObjectBoundary = new Transform[2];
     [HideInInspector]public CatFood MyCatFood;
     bool waitForFood = false;
     bool getFood = false;
@@ -178,12 +179,11 @@ public class CatStateMachine : MonoBehaviour
         }
         else
         {
-            if(Random.Range(0, 1f) <= 0.4f) // might ignore the food
+            if(Random.Range(0, 1f) <= 0.7f) // might ignore the food
             {
                 foodOnStage = true;
                 food.willBeEaten = true;
             }
-            
         }
         MyCatFood = food;
         food.durationCheck = false;
@@ -192,23 +192,35 @@ public class CatStateMachine : MonoBehaviour
     {   
         Audio_AnswerCall();
 
-        if(Random.Range(0, 1f) <= 0.4f & (Vector3.Distance(CatTransform.position, AnswerCallPos) > 0.05f)) // will respond to the call
+        if(!calling) // if cat has decide to answer your call, it WILL answer your (eventually)
         {
-            calling = true;
+            if(Random.Range(0, 1f) <= 0.4f & (Vector3.Distance(CatTransform.position, AnswerCallPos) > 0.05f)) // will respond to the call
+            {
+                calling = true;
+                RecordCSVWriter.CSV_Write("Call", "successful call");
+            }
+            else
+            {
+                RecordCSVWriter.CSV_Write("Call", "no response");
+            }
+        }
+        else
+        {
+            RecordCSVWriter.CSV_Write("Call", "invalid call");
         }
     }
     public void GetBallPlay()
     {   
-        if(Random.Range(0, 1f) <= 0.1f) // will observe the ball, otherwise ignore it
-        {
-            Debug.Log("ignore ball");
-            MyBall.SelfDestroy(true);
-        }
-        else
+        if(Random.Range(0, 1f) <= 0.9f) // will observe the ball, otherwise ignore it
         {
             Debug.Log("will play");
             ballAppears = true;
             MyBall.ObserveBall();
+        }
+        else
+        {
+            Debug.Log("ignore ball");
+            MyBall.SelfDestroy(true);
         }
     }
 
@@ -216,11 +228,17 @@ public class CatStateMachine : MonoBehaviour
     {
         var posX = CatTransform.position.x;
         var posY = CatTransform.position.y;
-        if((posX > -8.75f & posX < 8.75f) & (posY > -4.5f & posY < 4.5f) && Random.Range(0, 1f) <= chance)
+        var minX = (ObjectBoundary[0].position.x < ObjectBoundary[1].position.x)? ObjectBoundary[0].position.x : ObjectBoundary[1].position.x;
+        var maxX = (ObjectBoundary[0].position.x > ObjectBoundary[1].position.x)? ObjectBoundary[0].position.x : ObjectBoundary[1].position.x;
+        var minY = (ObjectBoundary[0].position.y < ObjectBoundary[1].position.y)? ObjectBoundary[0].position.y : ObjectBoundary[1].position.y;
+        var maxY = (ObjectBoundary[0].position.y > ObjectBoundary[1].position.y)? ObjectBoundary[0].position.y : ObjectBoundary[1].position.y;
+        
+        if((posX > minX & posX < maxX) & (posY > minY & posY < maxY) && Random.Range(0, 1f) <= chance)
         {
             var item = Instantiate(Poo);
             item.transform.SetParent(ObjectParents[0]);
             item.transform.position = catTransform.position;
+            RecordCSVWriter.CSV_Write("Cat", "take a shit");
         }
     }
 

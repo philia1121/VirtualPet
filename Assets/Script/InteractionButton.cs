@@ -5,11 +5,6 @@ using System.IO;
 
 public class InteractionButton : MonoBehaviour
 {
-    [Header("CSV Writer")]
-    public string fileName;
-    string fileType = ".csv";
-    string filePath; 
-
     [Header("Cat")]
     public CatStateMachine Cat;
 
@@ -21,29 +16,18 @@ public class InteractionButton : MonoBehaviour
     public GameObject BallPrefab;
     GameObject foodAwaitInCenter;
     GameObject ballOnStage;
-    string ballStatues;
+    public Transform[] Boundary = new Transform[2];
     public Vector3 FoodOffest = new Vector3(-0.6f, -1.94f, 0);
-
-    public void Start()
-    {
-        // data writer config
-        if(fileName == null)
-        {
-            fileName = "test";
-        }
-        string fileFullName = fileName + fileType;
-        filePath = Path.Combine(Application.persistentDataPath, fileFullName);
-    }
 
     public void Clear()
     {
-        RecordButton("Clear");
         try
         {  
             var food = FoodParent.GetChild(0).gameObject;
             if(!food.GetComponent<CatFood>().willBeEaten)
             {
                 Destroy(food);
+                RecordCSVWriter.CSV_Write("Clear", "clear food");
                 return;
             }
         }
@@ -54,15 +38,17 @@ public class InteractionButton : MonoBehaviour
         {
             var poo = PooParent.GetChild(0).gameObject;
             Destroy(poo);
+            RecordCSVWriter.CSV_Write("Clear", "clear a poo");
         }
         catch
-        {}
+        {
+            RecordCSVWriter.CSV_Write("Clear", "there's nothing to clear");
+        }
         
     }
 
     public void Feed()
     {
-        RecordButton("Feed");
         GameObject food;
         if(Cat.WaitForFood)
         {
@@ -81,60 +67,37 @@ public class InteractionButton : MonoBehaviour
 
         var foodComp = food.GetComponent<CatFood>();
         Cat.GetFed(foodComp);
+
+        string extra = (Cat.WaitForFood)? "is waiting for food": "user proactively fed the cat";
+        RecordCSVWriter.CSV_Write("Feed", extra);
     }
 
     public void Play()
     {
-        RecordButton("Play");
         GameObject ball;
         if(!ballOnStage)
         {   
-            var generatePos = new Vector3(Random.Range(-8.8f, 8.8f), Random.Range(-5f, 4.7f), 0);
-            while(Vector3.Distance(generatePos, Cat.transform.position) < 10f)
+            var generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), 0);
+            while(Vector3.Distance(generatePos, Cat.transform.position) < 10f) // re-generate if it's too close to the cat
             {
-                Debug.Log("too close");
-                generatePos = new Vector3(Random.Range(-8.8f, 8.8f), Random.Range(-5f, 4.7f), 0);
+                generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), 0);
             } 
-            ball = Instantiate(BallPrefab, new Vector3(Random.Range(-8.8f, 8.8f), Random.Range(-5f, 4.7f), 0), Quaternion.identity, BallParent);
+            ball = Instantiate(BallPrefab, generatePos, Quaternion.identity, BallParent);
             Cat.MyBall = ball.GetComponent<Ball>();
             Cat.BallTransform = ball.transform;
             ballOnStage = ball;
             Cat.GetBallPlay();
-            ballStatues = "create new ball";
+            RecordCSVWriter.CSV_Write("Play", "create new ball");
         }
         else
         {
-            ballStatues = "nothing happens";
+            RecordCSVWriter.CSV_Write("Play", "there's still ball on stage");
         }
-        
     }
 
     public void Call()
     {
-        RecordButton("Call");
         Cat.GetCalled();
-    }
-
-    public void RecordButton(string button)
-    {
-        TextWriter tw = new StreamWriter(filePath, true);
-        string content = button + "," + System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-        if(button == "Feed")
-        {
-            if(Cat.WaitForFood)
-            {
-                content = content + "," + "is waiting for food";
-            }
-            else
-            {
-                content = content + "," + "user proactively fed the cat";
-            }
-        }
-        if(button == "Play")
-        {
-            content = content + "," + ballStatues;
-        }
-        tw.WriteLine(content);
-        tw.Close(); //end writing file function
+        // Record Button data and cat's random respond result in CatStateMachine.GetCall();
     }
 }

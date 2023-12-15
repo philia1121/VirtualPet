@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,21 +10,13 @@ using UnityEditor;
 
 public class Exit : MonoBehaviour
 {
-    // PlayerInput Input;
+    MyInputMap Input;
     
-    // void Awake()
-    // {
-    //     Input = new PlayerInput();
-    //     Input.Shortcut.ESC.started += ctx => Exit();
-    // }
-
-    void Update()
+    void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ExitGame();
-            Debug.Log("Escape key was pressed");
-        } 
+        Input = new MyInputMap();
+        Input.Player.Exit.started += ctx => ExitGame();
+        Input.Player.Refresh.started += ctx => RefreshScene();
     }
 
     void ExitGame()
@@ -34,14 +27,18 @@ public class Exit : MonoBehaviour
             Application.Quit();
         #endif
     }
+    void RefreshScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
-    // void OnEnable()
-    // {
-    //     Input.Shortcut.Enable();
-    // }
-    // void OnDisable()
-    // {
-    //     Input.Shortcut.Disable();
-    // }
+    void OnEnable()
+    {
+        Input.Player.Enable();
+    }
+    void OnDisable()
+    {
+        Input.Player.Disable();
+    }
 
 }

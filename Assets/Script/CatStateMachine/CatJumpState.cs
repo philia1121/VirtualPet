@@ -18,6 +18,8 @@ public class CatJumpState : CatBaseState
         _ctx.Transitioning = true;
         _ctx.NextAnimation = _ctx.Jump;
         _ctx.NextAnimationAwait = true;
+        _ctx.UseAdditionalSpeedAdjust = true;
+        _ctx.AdditionalSpeedAdjust = 1.5f;
 
         reachTarget = true;
         setTimer = false;
@@ -39,9 +41,6 @@ public class CatJumpState : CatBaseState
         {
             var catPos = _ctx.CatTransform.position;
 
-            float jumpProgress = (_ctx.CurrentAnimationProgress - 0.1f)/ 0.4f;
-            
-
             if(reachTarget & reset)
             {
                 if(_ctx.Calling)
@@ -52,6 +51,8 @@ public class CatJumpState : CatBaseState
                 {
                     randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), catPos.z);
                 }
+                var dir = randomTarget - catPos;
+                _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing
                 reset = false;
                 reachTarget = false;
             }
@@ -59,9 +60,8 @@ public class CatJumpState : CatBaseState
             center -= new Vector3(0, 5, 0);
             startRelCenter = catPos - center;
             targetRelCenter = randomTarget - center;
-            var dir = randomTarget - catPos;
-            _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing
-
+            
+            float jumpProgress = (_ctx.CurrentAnimationProgress - 0.1f) / (0.5f - 0.1f);
             if(jumpProgress >= 0.95f)
             {
                 if(_ctx.Calling)
@@ -78,7 +78,7 @@ public class CatJumpState : CatBaseState
             }
             else
             {
-                _ctx.CatTransform.position = Vector3.Slerp(startRelCenter, targetRelCenter, jumpProgress) + center;
+                _ctx.CatTransform.position = Vector3.Slerp(startRelCenter, targetRelCenter, 0.05f) + center;
             }
         }
         else
@@ -95,6 +95,7 @@ public class CatJumpState : CatBaseState
     public override void ExitState()
     {
         _ctx.UseTransitionSpeedUp = true;
+        _ctx.UseAdditionalSpeedAdjust = false;
     }
 
     public override void CheckSwitchStates()
