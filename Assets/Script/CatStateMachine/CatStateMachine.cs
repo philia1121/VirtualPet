@@ -176,6 +176,7 @@ public class CatStateMachine : MonoBehaviour
         if(waitForFood)
         {
             getFood = true;
+            food.willBeEaten = true;
         }
         else
         {

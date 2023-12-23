@@ -10,11 +10,15 @@ using UnityEditor;
 
 public class Exit : MonoBehaviour
 {
-    MyInputMap Input;
+    public MyInputMap Input;
     
     void Awake()
     {
-        Input = new MyInputMap();
+        if(Input == null)
+        {
+            Input = new MyInputMap();
+        }
+        
         Input.Player.Exit.started += ctx => ExitGame();
         Input.Player.Refresh.started += ctx => RefreshScene();
     }

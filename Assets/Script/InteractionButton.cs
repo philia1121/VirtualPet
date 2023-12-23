@@ -21,18 +21,18 @@ public class InteractionButton : MonoBehaviour
 
     public void Clear()
     {
-        try
-        {  
-            var food = FoodParent.GetChild(0).gameObject;
-            if(!food.GetComponent<CatFood>().willBeEaten)
-            {
-                Destroy(food);
-                RecordCSVWriter.CSV_Write("Clear", "clear food");
-                return;
-            }
-        }
-        catch
-        {}
+        // try
+        // {  
+        //     var food = FoodParent.GetChild(0).gameObject;
+        //     if(!food.GetComponent<CatFood>().willBeEaten)
+        //     {
+        //         Destroy(food);
+        //         RecordCSVWriter.CSV_Write("Clear", "clear food");
+        //         return;
+        //     }
+        // }
+        // catch
+        // {}
         
         try
         {
