@@ -10,10 +10,10 @@ public class CatStretchState : CatBaseState
     bool setTimer = false;
     public override void EnterState()
     {
-        Debug.Log("Stretch state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Stretch;
+        _ctx.NextAnimation_str = "stretch";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = false;
         setTimer = false;
     }
 

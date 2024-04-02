@@ -59,7 +59,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/CatExperiment/DesktopPetScene_White_Solid.unity
     guid: 896a0406b07442a41a73731c5c8357b3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CatExperiment/DesktopPetScene_Pink_Solid.unity
     guid: b0e0ac4280ae3174f823a1205339aca2
   - enabled: 0
@@ -68,5 +68,20 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/CatExperiment/DesktopPetScene_Blue_Spotted.unity
     guid: bd1ff81ef85a70549b1a4052f473ca2b
+  - enabled: 0
+    path: Assets/Scenes/MainScene.unity
+    guid: d919f80e247ffcc4ebc80e1eca80bb93
+  - enabled: 1
+    path: Assets/Scenes/MainScene_Get.unity
+    guid: 168e1eac87419144cb6cb5e23eb35162
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: Assets/Scenes/SimpleTestScene.unity
+    guid: bb0b8e967f81a5c448654bff3ac07b0a
+  - enabled: 0
+    path: Assets/Scenes/DesktopPetScene_All_In_One.unity
+    guid: 13d771e695ff7bb448d86249d592741c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 72f9572de1df29448a77b8c07168f4d1, type: 2}

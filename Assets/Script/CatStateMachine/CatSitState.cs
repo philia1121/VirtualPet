@@ -12,8 +12,9 @@ public class CatSitState : CatBaseState
     public override void EnterState()
     {
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.SitDown;
+        _ctx.NextAnimation_str = "sitDown";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = false;
         preAnimation = false;
         postAnimation = false;
     }
@@ -23,7 +24,7 @@ public class CatSitState : CatBaseState
         if(!_ctx.Transitioning && !preAnimation && _ctx.SimpleCurrentAnimationProgress == 1)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.Sit;
+            _ctx.NextAnimation_str = "sit";
             _ctx.NextAnimationAwait = true;
             preAnimation = true;
             _ctx.CallRandomSwitchState();
@@ -32,7 +33,7 @@ public class CatSitState : CatBaseState
         if(!_ctx.Transitioning && !postAnimation && preAnimation && _ctx.TimeUp)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.SitUp;
+            _ctx.NextAnimation_str = "sitUp";
             _ctx.NextAnimationAwait = true;
             postAnimation = true;
         }

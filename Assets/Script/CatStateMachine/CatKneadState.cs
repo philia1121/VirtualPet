@@ -19,10 +19,10 @@ public class CatKneadState : CatBaseState
     Vector3 cushionPos = Vector3.zero;
     public override void EnterState()
     {
-        Debug.Log("Knead state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Walk;
+        _ctx.NextAnimation_str = "walk";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = false;
         setTimer = false;
         wandering = false;
         kneading = false;
@@ -45,8 +45,9 @@ public class CatKneadState : CatBaseState
         if(setTimer & _ctx.TimeUp & !placing) // place the cushion
         {
             placing = true;
-            cushionPos = new Vector3(Random.Range(_ctx.ObjectBoundary[0].position.x, _ctx.ObjectBoundary[1].position.x), Random.Range(_ctx.ObjectBoundary[0].position.y, _ctx.ObjectBoundary[1].position.y), _ctx.CatTransform.position.z);
+            cushionPos = new Vector3(Random.Range(_ctx.ObjectBoundary[0].position.x, _ctx.ObjectBoundary[1].position.x), Random.Range(_ctx.ObjectBoundary[0].position.y, _ctx.ObjectBoundary[1].position.y), Random.Range(_ctx.Boundary[0].position.z, _ctx.Boundary[1].position.z));
             ignoreCushion = (Random.Range(0, 1f) < 0.1f)? true : false; // slight chance that cat will ignore the cushion
+            ignoreCushion = true;
             _ctx.PlaceCushion(cushionPos);
 
             _ctx.CallRandomSwitchState();
@@ -54,12 +55,12 @@ public class CatKneadState : CatBaseState
 
         if(wandering)
         {
-            if(!_ctx.TimeUp | !placing) // keep wandering
+            if(!_ctx.TimeUp | !placing) // keep wandering before cushion shows up
             {
                 var catPos = _ctx.CatTransform.position;
                 if(reachTarget)
                 {
-                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), catPos.z);
+                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), Random.Range(_ctx.Boundary[0].position.z, _ctx.Boundary[1].position.z));
                     reachTarget = false;
                     var dir = randomTarget - catPos;
                     _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing
@@ -89,13 +90,14 @@ public class CatKneadState : CatBaseState
                         kneading = true;
                         _ctx.UseTransitionSpeedUp = true;
                         _ctx.Transitioning = true;
-                        _ctx.NextAnimation = _ctx.PreKnead;
+                        _ctx.NextAnimation_str = "preKnead";
                         _ctx.NextAnimationAwait = true;
+                        _ctx.DragBanned = true;
                     }
                 }
-                else // will ignore the cushion, just leave the state
+                else // will ignore the cushion, just leave the state right after
                 {
-                    _ctx.RemoveCushion();
+                    // _ctx.RemoveCushionByName("CushionSpawnedByCat");
                     _ctx.UseTransitionSpeedUp = true;
                     SwitchState(_factory.Idle());
                 }
@@ -109,7 +111,7 @@ public class CatKneadState : CatBaseState
                 preAnimation = true;
                 _ctx.UseTransitionSpeedUp = false;
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.Knead;
+                _ctx.NextAnimation_str = "knead";
                 _ctx.NextAnimationAwait = true;
                 _ctx.CallRandomSwitchState();
 
@@ -119,7 +121,7 @@ public class CatKneadState : CatBaseState
             if(!_ctx.Transitioning && !postAnimation && preAnimation && _ctx.TimeUp)
             {
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.PostKnead;
+                _ctx.NextAnimation_str = "postKnead";
                 _ctx.NextAnimationAwait = true;
                 postAnimation = true;
 
@@ -128,7 +130,7 @@ public class CatKneadState : CatBaseState
 
             if(!_ctx.Transitioning && postAnimation & _ctx.SimpleCurrentAnimationProgress == 1)
             {
-                _ctx.RemoveCushion();
+                // _ctx.RemoveCushionByName("CushionSpawnedByCat");
                 SwitchState(_factory.Idle());
             }
             
@@ -138,6 +140,7 @@ public class CatKneadState : CatBaseState
 
     public override void ExitState()
     {
+        _ctx.RemoveCushionByName("CushionSpawnedByCat");
         _ctx.MyAudioSource.Stop();
     }
 

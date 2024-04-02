@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using extOSC;
 
+[RequireComponent(typeof(LoadCatAssets))]
 public class CatStateMachine : MonoBehaviour
 {
     [Header("StateMachine")]
@@ -13,18 +15,26 @@ public class CatStateMachine : MonoBehaviour
     [Header("Testing")]
     public bool ManualControl = false;
     public float ManualStateNum = 0;
-    public bool shorterSwitchDuration = false;
+    public bool ShorterSwitchDuration = false;
+    public float[] ShorterDuration = new float[]{ 3f, 10f};
+
+    [Header("OSC Settings")]
+    public bool IllusionMode = false;
+    public bool SendOSCMessage = true;
+    public string catInfo_Address = "/Cat/Info";
 
     [Header("Manual Animation")]
+    public bool FastAssetsMode = false;
+    public LoadCatAssets MyLoadAssets;
     [SerializeField]private RawImage catAppearance;
     RectTransform catTransform;
-    Texture[] currentAnimation, nextAnimation;
-    public Texture[] Eat, Idle, Jump, Knead, Observe, PostEat, PostKnead, PostScratch, PostWaitForEat,
-        PreEat, PreKnead, PreScratch, PreWaitForEat, Scratch, Sit, SitDown, SitUp, Sleep, Stretch, WaitForEat, Walk;
+    Texture[] currentAnimation;
+    string currentAnimation_str, nextAnimation_str;
+    public Dictionary<string, Texture[]> AnimationDic = new Dictionary<string, Texture[]>();
     bool nextAnimationAwait = false;
     bool transitioning = false;
     int currentFrame = 0;
-    float frameDuration = 0.015f;
+    float frameDuration = 0.015f; // should be set to 0.015f
     bool useTransitionSpeedUp = false;
     float transitionSpeedUp = 0.1f;
     bool useAdditionalSpeedAdjust = false;
@@ -57,12 +67,14 @@ public class CatStateMachine : MonoBehaviour
     [HideInInspector]public Ball MyBall;
     bool ballAppears = false;
 
+    [Header("Interact")]
+    [SerializeField]private bool beDragged = false;
+    public bool DragBanned = false;
 
     #region Variables
     public CatBaseState CurrentState { get{ return _currentState;} set{ _currentState = value;}}
     public bool NextAnimationAwait { get{ return nextAnimationAwait;} set{ nextAnimationAwait = value;}}
     public bool Transitioning { get{ return transitioning;} set{ transitioning = value;}}
-    public Texture[] NextAnimation { get{ return nextAnimation;} set{ nextAnimation = value;}}
     public bool UseTransitionSpeedUp { get{ return useTransitionSpeedUp;} set{ useTransitionSpeedUp = value;}}
     public bool UseAdditionalSpeedAdjust { get{ return useAdditionalSpeedAdjust;} set{ useAdditionalSpeedAdjust = value;}}
     public float AdditionalSpeedAdjust { get{ return additionalSpeedAdjust;} set{ additionalSpeedAdjust = value;}}
@@ -70,7 +82,8 @@ public class CatStateMachine : MonoBehaviour
     public bool GetFood { get{ return getFood;} set{ getFood = value;}}
     public bool Calling { get{ return calling;} set{ calling = value;}}
     public bool BallApears { get{ return ballAppears;} set{ ballAppears = value;}}
-    public bool FoodOnStage { get{ return foodOnStage;} set{ foodOnStage = value;}}   
+    public bool FoodOnStage { get{ return foodOnStage;} set{ foodOnStage = value;}}
+    public string NextAnimation_str { get{ return nextAnimation_str;} set{ nextAnimation_str = value;}}
 
     
     // Readable only
@@ -83,19 +96,26 @@ public class CatStateMachine : MonoBehaviour
     public AudioSource MyAudioSource { get{ return myAudioSource;}}
     public AudioClip[] MyAudioClips { get{ return myAudioClips;}}
     public float AudioPlayingProgress { get{ return myAudioSource.time/myAudioSource.clip.length;}}
+    public bool BeDragged { get{ return beDragged;}}
 
     #endregion
 
 
-    void Awake()
+    void Start()
     {
+        if(FastAssetsMode)
+        {
+            GetLoadedAssets();
+        }
         _states = new CatStateFactory(this);
         _currentState = _states.Idle();
         _currentState.EnterState();
 
         catTransform = catAppearance.GetComponent<RectTransform>();
 
-        currentAnimation = Idle;
+        // currentAnimation = Idle;
+        currentAnimation_str = "idle";
+        currentAnimation = AnimationDic[currentAnimation_str];
         animationPlayer = ManualAnimationPlayer();
         StartCoroutine(animationPlayer);
     }
@@ -103,6 +123,55 @@ public class CatStateMachine : MonoBehaviour
     void Update()
     {
         _currentState.UpdateState();
+
+        Send_CatInfo();
+    }
+    void OnMouseUp()
+    {
+        beDragged = false;
+    }
+    void OnMouseDown()
+    {
+        Debug.Log("cat on click");
+        beDragged = true;
+        if(!DragBanned)
+        {
+            CurrentState.ExitState();
+            _currentState = _states.Dragged();
+            _currentState.EnterState();
+        }
+    }
+
+    public void GetLoadedAssets()
+    {
+        AnimationDic.Clear();
+
+        //Initialize AnimationDic
+        string[] allAniState = new string[]{ "eat", "idle", "jump", "knead", 
+                "observe", "postEat", "postKnead", "postScratch", "postWaitForEat", "preEat", "preKnead", "preScratch",
+                "preWaitForEat", "scratch", "sit", "sitDown", "sitUp", "sleep", "stretch", "waitForEat", "walk"};
+        foreach(var item in allAniState)
+        {
+            AnimationDic.Add(item, new Texture[0]);
+        }
+
+        // Load Asset
+        if(FastAssetsMode)
+        {
+            var temp = new Texture[]{catAppearance.texture};
+            foreach(var item in allAniState)
+            {
+                AnimationDic[item] = temp;
+            }
+        }
+        else
+        {
+            foreach(var item in MyLoadAssets.AnimationArrayDic)
+            {
+                AnimationDic[item.Key] = item.Value;
+            }
+        }
+        catAppearance.texture = AnimationDic["idle"][0];
     }
 
     public IEnumerator ManualAnimationPlayer()
@@ -118,8 +187,9 @@ public class CatStateMachine : MonoBehaviour
             {
                 if(nextAnimationAwait)
                 {
-                    currentAnimation = nextAnimation;
-                    nextAnimation = null;
+                    // currentAnimation = nextAnimation;
+                    currentAnimation = AnimationDic[nextAnimation_str];
+                    currentAnimation_str = nextAnimation_str;
                     nextAnimationAwait = false;
                     transitioning = false;
                 }
@@ -130,7 +200,30 @@ public class CatStateMachine : MonoBehaviour
 
             var playingSpeed = (useTransitionSpeedUp && transitioning) ? frameDuration* transitionSpeedUp : frameDuration; //speed up the transition
             playingSpeed = useAdditionalSpeedAdjust ? playingSpeed* additionalSpeedAdjust : playingSpeed; //speed up the playing speed with additional adjustment value 
+            
+
             yield return new WaitForSecondsRealtime(playingSpeed);
+        }
+    }
+
+    void Send_CatInfo() //general info
+    {
+        if(SendOSCMessage)
+        {
+            // Debug.Log("send--------------------------------");
+            var message = new OSCMessage(catInfo_Address);
+
+            message.AddValue(OSCValue.String(currentAnimation_str)); // 0: currentAnimation
+            message.AddValue(OSCValue.Int(currentFrame)); // 1: currentFrame
+            
+            var currentPos = CatTransform.position; // 2: current Position
+            message.AddValue(OSCValue.Array(OSCValue.Float(currentPos.x), OSCValue.Float(currentPos.y), OSCValue.Float(currentPos.z)));
+
+            var currentFacing = CatTransform.localScale; // 3: current LocalScale
+            message.AddValue(OSCValue.Array(OSCValue.Float(currentFacing.x), OSCValue.Float(currentFacing.y), OSCValue.Float(currentFacing.z)));
+
+
+            SenderCenter.instance.SendMessageToAll(catInfo_Address, message);
         }
     }
 
@@ -150,12 +243,16 @@ public class CatStateMachine : MonoBehaviour
     public void CallRandomSwitchState(bool autoSwitchState = false, float minDuration = 180, float maxDuration = 900)
     {
         timeUp = false;
-        if(shorterSwitchDuration)
+        if(ShorterSwitchDuration)
         {
-            minDuration = 3;
-            maxDuration = 10;
+            minDuration = ShorterDuration[0];
+            maxDuration = ShorterDuration[1];
         }
         StartCoroutine(RandomTimer(minDuration, maxDuration, autoSwitchState));
+    }
+    public void StopRandomTimer()
+    {
+        StopCoroutine("RandomTimer");
     }
     
     public IEnumerator RandomSimpleTimer(float min, float max)
@@ -177,23 +274,27 @@ public class CatStateMachine : MonoBehaviour
         {
             getFood = true;
             food.willBeEaten = true;
+            food.durationCheck = false;
+            food.eatingCount++;
         }
         else
         {
+            Debug.Log("Get a Food");
             if(Random.Range(0, 1f) <= 0.7f) // might ignore the food
             {
                 foodOnStage = true;
                 food.willBeEaten = true;
+                food.durationCheck = false;
+                food.eatingCount++;
             }
         }
         MyCatFood = food;
-        food.durationCheck = false;
     }
     public void GetCalled()
     {   
         Audio_AnswerCall();
 
-        if(!calling) // if cat has decide to answer your call, it WILL answer your (eventually)
+        if(!calling) // if cat has decide to answer your call, it WILL answer to you (eventually)
         {
             if(Random.Range(0, 1f) <= 0.4f & (Vector3.Distance(CatTransform.position, AnswerCallPos) > 0.05f)) // will respond to the call
             {
@@ -237,21 +338,53 @@ public class CatStateMachine : MonoBehaviour
         if((posX > minX & posX < maxX) & (posY > minY & posY < maxY) && Random.Range(0, 1f) <= chance)
         {
             var item = Instantiate(Poo);
+            var id = System.Guid.NewGuid().ToString();
+            item.name = "Poo_" + id;
             item.transform.SetParent(ObjectParents[0]);
             item.transform.position = catTransform.position;
-            RecordCSVWriter.CSV_Write("Cat", "take a shit");
+            // RecordCSVWriter.CSV_Write("Cat", "take a shit");
+
+            Send_PooInfo(id, item);
+        }
+    }
+    void Send_PooInfo(string pooId, GameObject poo)
+    {
+        if(SendOSCMessage)
+        {
+            PropsBroadcaster.instance.pooDic.Add(pooId, poo);
+
+            var message = new OSCMessage(PropsBroadcaster.poo_Address);
+            message.AddValue(OSCValue.String(pooId)); // 1: poo ID
+            message.AddValue(OSCValue.Bool(true)); // 2: poo spawned
+            var pooPos = CatTransform.position; // 3: poo position
+            message.AddValue(OSCValue.Array(OSCValue.Float(pooPos.x), OSCValue.Float(pooPos.y), OSCValue.Float(pooPos.z)));
+            SenderCenter.instance.SendMessageToAll(PropsBroadcaster.poo_Address, message);
         }
     }
 
-    public void PlaceCushion(Vector3 pos)
+    public void PlaceCushion(Vector3 pos) // cat itself place its cushion
     {
         var item = Instantiate(Cushion);
+        item.name = "CushionSpawnedByCat"; // cat itself 
         item.transform.SetParent(ObjectParents[1]);
         item.transform.position = pos;
+
+        Send_CushionInfo(item.name, pos);
     }
-    public void RemoveCushion()
+    void Send_CushionInfo(string cushionId, Vector3 cushionPos)
     {
-        Destroy(ObjectParents[1].GetChild(0).gameObject);
+        if(SendOSCMessage)
+        {
+            var message = new OSCMessage(PropsBroadcaster.cushion_Address);
+            message.AddValue(OSCValue.String(cushionId)); // 1: cushion id
+            message.AddValue(OSCValue.Bool(true)); // 2: cushion spawned
+            message.AddValue(OSCValue.Array(OSCValue.Float(cushionPos.x), OSCValue.Float(cushionPos.y), OSCValue.Float(cushionPos.z))); // 3: cushion position
+            SenderCenter.instance.SendMessageToAll(PropsBroadcaster.cushion_Address, message);
+        }
+    }
+    public void RemoveCushionByName(string name)
+    {
+        Destroy(ObjectParents[1].Find(name).gameObject);
     }
 
     public void Audio_AnswerCall()

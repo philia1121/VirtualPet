@@ -41,8 +41,7 @@ public class MyTransparentWindow : MonoBehaviour
     static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
     static readonly IntPtr HWND_TOP = new IntPtr(0);
     private IntPtr hWnd;
-
-
+    bool allowClickthrough = true; 
     void Start()
     {
         // MessageBox(new IntPtr(0), "Hello World!", "Hello Dialog", 0);
@@ -65,7 +64,21 @@ public class MyTransparentWindow : MonoBehaviour
     private void Update()
     {
         //Clickthrough是用偵測Collider的方式，對象要有裝collider才會算被點到
-        SetClickthrough(Physics2D.OverlapPoint(CodeMonkey.Utils.UtilsClass.GetMouseWorldPosition()) == null);    
+        if(allowClickthrough)
+        {
+            SetClickthrough(Physics2D.OverlapPoint(GetMouseWorldPosition()) == null);
+        }   
+    }
+    Vector3 GetMouseWorldPosition()
+    {
+        Vector3 vec = GetMouseWorldPositionWithZ(Input.mousePosition, Camera.main);
+        vec.z = 0f;
+        return vec;
+    }
+    Vector3 GetMouseWorldPositionWithZ(Vector3 screenPosition, Camera worldCamera)
+    {
+        Vector3 worldPosition = worldCamera.ScreenToWorldPoint(screenPosition);
+        return worldPosition;
     }
 
     private void SetClickthrough(bool clickthrough)
@@ -75,6 +88,14 @@ public class MyTransparentWindow : MonoBehaviour
             SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED | WS_EX_TRANSPARENT);
         }
         else
+        {
+            SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
+        }
+    }
+    public void SetClickThroughBlocker(bool value)
+    {
+        allowClickthrough = value;
+        if(!allowClickthrough)
         {
             SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
         }

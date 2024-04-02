@@ -17,23 +17,23 @@ public class InteractionButton : MonoBehaviour
     GameObject foodAwaitInCenter;
     GameObject ballOnStage;
     public Transform[] Boundary = new Transform[2];
-    public Vector3 FoodOffest = new Vector3(-0.6f, -1.94f, 0);
+    public Vector3 FoodOffset = new Vector3(-0.6f, -1.94f, 0);
 
     public void Clear()
     {
-        // try
-        // {  
-        //     var food = FoodParent.GetChild(0).gameObject;
-        //     if(!food.GetComponent<CatFood>().willBeEaten)
-        //     {
-        //         Destroy(food);
-        //         RecordCSVWriter.CSV_Write("Clear", "clear food");
-        //         return;
-        //     }
-        // }
-        // catch
-        // {}
-        
+        try
+        {  
+            var food = FoodParent.GetChild(0).gameObject;
+            if(!food.GetComponent<CatFood>().willBeEaten)
+            {
+                Destroy(food);
+                RecordCSVWriter.CSV_Write("Clear", "clear food");
+                return; // if there's food can be cleared, clear the food. if not, check is there anything need to be cleared up
+            }
+        }
+        catch
+        {}
+
         try
         {
             var poo = PooParent.GetChild(0).gameObject;
@@ -52,7 +52,7 @@ public class InteractionButton : MonoBehaviour
         GameObject food;
         if(Cat.WaitForFood)
         {
-            food = Instantiate(FoodPrefab, Cat.CatTransform.position + FoodOffest, Quaternion.identity, FoodParent);
+            food = Instantiate(FoodPrefab, Cat.CatTransform.position + FoodOffset, Quaternion.identity, FoodParent);
         }
         else
         {
@@ -61,7 +61,7 @@ public class InteractionButton : MonoBehaviour
                 var oldFood = foodAwaitInCenter;
                 Destroy(oldFood);
             }
-            food = Instantiate(FoodPrefab, new Vector3(0, -2f, 0), Quaternion.identity, FoodParent);
+            food = Instantiate(FoodPrefab, new Vector3(0, -2f, -10), Quaternion.identity, FoodParent);
             foodAwaitInCenter = food;
         }
 
@@ -77,13 +77,15 @@ public class InteractionButton : MonoBehaviour
         GameObject ball;
         if(!ballOnStage)
         {   
-            var generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), 0);
+            var generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), Random.Range(Boundary[0].position.z, Boundary[1].position.z));
             while(Vector3.Distance(generatePos, Cat.transform.position) < 10f) // re-generate if it's too close to the cat
             {
-                generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), 0);
+                generatePos = new Vector3(Random.Range(Boundary[0].position.x, Boundary[1].position.x), Random.Range(Boundary[0].position.y, Boundary[1].position.y), Random.Range(Boundary[0].position.z, Boundary[1].position.z));
             } 
             ball = Instantiate(BallPrefab, generatePos, Quaternion.identity, BallParent);
             Cat.MyBall = ball.GetComponent<Ball>();
+            Cat.MyBall.boundary[0] = Boundary[0].position;
+            Cat.MyBall.boundary[1] = Boundary[1].position;
             Cat.BallTransform = ball.transform;
             ballOnStage = ball;
             Cat.GetBallPlay();

@@ -44,6 +44,60 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BorderEdit"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a9b3544-a0cc-43db-a4ce-16f63a86713a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AssetEdit"",
+                    ""type"": ""Button"",
+                    ""id"": ""44258a09-bf08-4783-a67d-b02ee23608a2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StateEdit"",
+                    ""type"": ""Button"",
+                    ""id"": ""2aa47a84-9044-46ea-a427-46c40abc7f55"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PropsEdit"",
+                    ""type"": ""Button"",
+                    ""id"": ""6d9edf9d-e8e9-40db-94ba-adc3fb5b99ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ed09b9da-db33-45cc-9797-5d478d9cfa36"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Blocker"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f51f015-9334-4ad0-8e13-6bbee74180e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -59,9 +113,9 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""463ecaeb-e02c-4b91-acda-7a010d7e568f"",
-                    ""path"": ""TwoModifiers"",
+                    ""name"": ""One Modifier"",
+                    ""id"": ""b0f3fa29-9f6d-4aad-adc0-8203a12e75bf"",
+                    ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -70,19 +124,8 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier1"",
-                    ""id"": ""e18f1984-de63-498a-a552-172d6c5ebf77"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Refresh"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""f4d2c9a5-56de-404f-8be8-65b6a8540842"",
+                    ""name"": ""modifier"",
+                    ""id"": ""dd56cc4c-67e4-42de-94f3-7ac7a53d6de5"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -93,12 +136,188 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""binding"",
-                    ""id"": ""c89de103-83c0-484f-8092-b609c1a3da10"",
+                    ""id"": ""ff100931-2874-46ab-9fa4-88e7f14b2c2f"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Refresh"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""29dab619-8ca8-4976-841d-4216e6d728a6"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BorderEdit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""cc0ac064-3603-40d6-88fd-b924764f0c12"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BorderEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""5296f684-7707-46b8-8a5b-90b513b2f9af"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BorderEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""951b8a1c-4d92-4bc7-bb1c-44c81e58fa5f"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AssetEdit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""63ee5eed-cb9e-4ebe-833f-2f85dfb146dc"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AssetEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""be9e0bf6-0c28-4f73-9c3c-7ff9f5b96f94"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AssetEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""aababe2b-bb36-4f23-9b7d-b90bbc0a56e7"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StateEdit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""07210723-dbb8-4817-96d3-fbf3acda00c7"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StateEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""05a3c713-3f15-4965-9d3c-fde777c0527c"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StateEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""a0a35483-3ef5-4f74-bed3-2ffd96550d19"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PropsEdit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""d23bb4af-e7a4-4677-bf17-08c2b9a3b904"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PropsEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""e0c88c28-c643-447f-aac5-6aa323a06f00"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PropsEdit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a008ec53-cd2d-4c0b-8907-b25e571eb60d"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""f2306bb9-c35a-469c-b6f7-18a845a6ab41"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Blocker"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""f48cc785-d09c-43bd-8b42-e5d844d438ce"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Blocker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2425540f-d2e2-4b65-a3ed-5e4dd71915cc"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Blocker"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -111,6 +330,12 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Exit = m_Player.FindAction("Exit", throwIfNotFound: true);
         m_Player_Refresh = m_Player.FindAction("Refresh", throwIfNotFound: true);
+        m_Player_BorderEdit = m_Player.FindAction("BorderEdit", throwIfNotFound: true);
+        m_Player_AssetEdit = m_Player.FindAction("AssetEdit", throwIfNotFound: true);
+        m_Player_StateEdit = m_Player.FindAction("StateEdit", throwIfNotFound: true);
+        m_Player_PropsEdit = m_Player.FindAction("PropsEdit", throwIfNotFound: true);
+        m_Player_Newaction = m_Player.FindAction("New action", throwIfNotFound: true);
+        m_Player_Blocker = m_Player.FindAction("Blocker", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -172,12 +397,24 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Exit;
     private readonly InputAction m_Player_Refresh;
+    private readonly InputAction m_Player_BorderEdit;
+    private readonly InputAction m_Player_AssetEdit;
+    private readonly InputAction m_Player_StateEdit;
+    private readonly InputAction m_Player_PropsEdit;
+    private readonly InputAction m_Player_Newaction;
+    private readonly InputAction m_Player_Blocker;
     public struct PlayerActions
     {
         private @MyInputMap m_Wrapper;
         public PlayerActions(@MyInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Exit => m_Wrapper.m_Player_Exit;
         public InputAction @Refresh => m_Wrapper.m_Player_Refresh;
+        public InputAction @BorderEdit => m_Wrapper.m_Player_BorderEdit;
+        public InputAction @AssetEdit => m_Wrapper.m_Player_AssetEdit;
+        public InputAction @StateEdit => m_Wrapper.m_Player_StateEdit;
+        public InputAction @PropsEdit => m_Wrapper.m_Player_PropsEdit;
+        public InputAction @Newaction => m_Wrapper.m_Player_Newaction;
+        public InputAction @Blocker => m_Wrapper.m_Player_Blocker;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -193,6 +430,24 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                 @Refresh.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRefresh;
                 @Refresh.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRefresh;
                 @Refresh.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRefresh;
+                @BorderEdit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBorderEdit;
+                @BorderEdit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBorderEdit;
+                @BorderEdit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBorderEdit;
+                @AssetEdit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAssetEdit;
+                @AssetEdit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAssetEdit;
+                @AssetEdit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAssetEdit;
+                @StateEdit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStateEdit;
+                @StateEdit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStateEdit;
+                @StateEdit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStateEdit;
+                @PropsEdit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPropsEdit;
+                @PropsEdit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPropsEdit;
+                @PropsEdit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPropsEdit;
+                @Newaction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNewaction;
+                @Newaction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNewaction;
+                @Newaction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNewaction;
+                @Blocker.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocker;
+                @Blocker.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocker;
+                @Blocker.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlocker;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -203,6 +458,24 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
                 @Refresh.started += instance.OnRefresh;
                 @Refresh.performed += instance.OnRefresh;
                 @Refresh.canceled += instance.OnRefresh;
+                @BorderEdit.started += instance.OnBorderEdit;
+                @BorderEdit.performed += instance.OnBorderEdit;
+                @BorderEdit.canceled += instance.OnBorderEdit;
+                @AssetEdit.started += instance.OnAssetEdit;
+                @AssetEdit.performed += instance.OnAssetEdit;
+                @AssetEdit.canceled += instance.OnAssetEdit;
+                @StateEdit.started += instance.OnStateEdit;
+                @StateEdit.performed += instance.OnStateEdit;
+                @StateEdit.canceled += instance.OnStateEdit;
+                @PropsEdit.started += instance.OnPropsEdit;
+                @PropsEdit.performed += instance.OnPropsEdit;
+                @PropsEdit.canceled += instance.OnPropsEdit;
+                @Newaction.started += instance.OnNewaction;
+                @Newaction.performed += instance.OnNewaction;
+                @Newaction.canceled += instance.OnNewaction;
+                @Blocker.started += instance.OnBlocker;
+                @Blocker.performed += instance.OnBlocker;
+                @Blocker.canceled += instance.OnBlocker;
             }
         }
     }
@@ -211,5 +484,11 @@ public partial class @MyInputMap : IInputActionCollection2, IDisposable
     {
         void OnExit(InputAction.CallbackContext context);
         void OnRefresh(InputAction.CallbackContext context);
+        void OnBorderEdit(InputAction.CallbackContext context);
+        void OnAssetEdit(InputAction.CallbackContext context);
+        void OnStateEdit(InputAction.CallbackContext context);
+        void OnPropsEdit(InputAction.CallbackContext context);
+        void OnNewaction(InputAction.CallbackContext context);
+        void OnBlocker(InputAction.CallbackContext context);
     }
 }

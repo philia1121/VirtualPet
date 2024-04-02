@@ -22,17 +22,27 @@ public static class RecordCSVWriter
 
     public static void CSV_Write(string buttonName, string extraData = null)
     {
-        TextWriter tw = new StreamWriter(filePath, true);
-        string content = buttonName + "," + System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "," + extraData;
-        tw.WriteLine(content);
-        tw.Close();
+        try
+        {
+             TextWriter tw = new StreamWriter(filePath, true);
+            string content = buttonName + "," + System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "," + extraData;
+            tw.WriteLine(content);
+            tw.Close();
+        }
+        catch
+        {}
     }
 
     public static void CSV_ApplicationUsageLog(string status, string extraData = null)
     {
-        TextWriter tw = new StreamWriter(usageFilePath, true);
-        string content = status + "," + System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "," + extraData;
-        tw.WriteLine(content);
-        tw.Close();
+        try
+        {
+            TextWriter tw = new StreamWriter(usageFilePath, true);
+            string content = status + "," + System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "," + extraData;
+            tw.WriteLine(content);
+            tw.Close();
+        }
+        catch
+        {}
     }
 }

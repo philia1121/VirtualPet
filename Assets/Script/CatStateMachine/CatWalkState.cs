@@ -12,11 +12,10 @@ public class CatWalkState : CatBaseState
     Vector3 randomTarget = Vector3.zero;
     public override void EnterState()
     {
-        Debug.Log("walk state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Walk;
+        _ctx.NextAnimation_str = "walk";
         _ctx.NextAnimationAwait = true;
-
+        _ctx.DragBanned = false;
         reachTarget = true;
         setTimer = false;
     }
@@ -43,7 +42,6 @@ public class CatWalkState : CatBaseState
 
                 if(Vector3.Distance(catPos, _ctx.AnswerCallPos) < 0.05f)
                 {
-                    Debug.Log("answered");
                     _ctx.Audio_AnswerCall();
                     _ctx.Calling = false;
                     SwitchState(_factory.Idle());
@@ -53,7 +51,7 @@ public class CatWalkState : CatBaseState
             {
                 if(reachTarget)
                 {
-                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), catPos.z);
+                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), Random.Range(_ctx.Boundary[0].position.z, _ctx.Boundary[1].position.z));
                     reachTarget = false;
                     var dir = randomTarget - catPos;
                     _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing

@@ -19,16 +19,17 @@ public class GetImage : MonoBehaviour
 	void Start () {
 		//Change this to change pictures folder
 		
-		pathPreFix = @"file://";
+		// pathPreFix = @"file://";
 
 		files = System.IO.Directory.GetFiles(path);
 		
-		// StartCoroutine(LoadImages());
+		StartCoroutine(LoadImages());
 	}
 	
 	private IEnumerator LoadImages()
     {
 		var url = pathPreFix + files[0];
+		// var url = "https://mir-s3-cdn-cf.behance.net/project_modules/fs/eb05ad95162973.5e90bda4833be.jpg";
 		UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
 		Debug.Log("Send Request at" + Time.time);
         yield return request.SendWebRequest();

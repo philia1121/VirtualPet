@@ -12,6 +12,8 @@ enum CatStates
     knead,
     eat,
     observe,
+    dragged,
+    chase
 }
 
 public class CatStateFactory
@@ -32,6 +34,8 @@ public class CatStateFactory
         _states[CatStates.knead] = new CatKneadState(_context, this);
         _states[CatStates.eat] = new CatEatState(_context, this);
         _states[CatStates.observe] = new CatObserveState(_context, this);
+        _states[CatStates.dragged] = new CatDraggedState(_context, this);
+        _states[CatStates.chase] = new CatChaseState(_context, this);
     }
 
     public CatBaseState Idle()
@@ -54,5 +58,9 @@ public class CatStateFactory
     {   return _states[CatStates.eat];}
     public CatBaseState Observe()
     {   return _states[CatStates.observe];}
+    public CatBaseState Dragged()
+    {   return _states[CatStates.dragged];}
+    public CatBaseState Chase()
+    {   return _states[CatStates.chase];}
 }
 

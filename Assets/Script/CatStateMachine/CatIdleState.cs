@@ -9,11 +9,11 @@ public class CatIdleState : CatBaseState
 
     public override void EnterState()
     {
-        Debug.Log("idle state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Idle;
+        _ctx.NextAnimation_str = "idle";
         _ctx.NextAnimationAwait = true;
         _ctx.CallRandomSwitchState(true, 1, 3);
+        _ctx.DragBanned = false;
     }
 
     public override void UpdateState()
@@ -32,7 +32,7 @@ public class CatIdleState : CatBaseState
 
         if(_ctx.Calling) //intervene while there's a call to answer
         {
-            next = Random.Range(0, 0.3f);
+            next = Random.Range(0.051f, 0.3f);
         }
         else if(_ctx.BallApears) // there's a ball to play
         {
@@ -50,33 +50,34 @@ public class CatIdleState : CatBaseState
 
         switch(next)
         {
-            case <= 0.05f:
+            case <= 0.05f: //5%
                 SwitchState(_factory.Knead());
                 break;
-            case <= 0.2f:
+            case <= 0.2f: //15%
                 _ctx.RandomTakeShit(0.2f);
                 SwitchState(_factory.Walk());
                 break;
-            case <= 0.3f:
+            case <= 0.3f: //10%
                 SwitchState(_factory.Jump());
                 break;
-            case <= 0.4f:
+            case <= 0.4f: //10%
                 _ctx.RandomTakeShit(0.2f);
                 SwitchState(_factory.Sit());
                 break;
-            case <= 0.5f:
+            case <= 0.5f: //10%
                 _ctx.RandomTakeShit(0.5f);
                 SwitchState(_factory.Eat());
                 break;
-            case <= 0.55f:
+            case <= 0.55f: //5%
                 SwitchState(_factory.Scratch());
                 break;
-            case <= 0.6f:
+            case <= 0.6f: //5%
                 SwitchState(_factory.Stretch());
                 break;
-            case <= 1f:
+            case <= 1f: //40%
                 SwitchState(_factory.Sleep());
                 break;
+                
             case <= 2f:
                 SwitchState(_factory.Observe());
                 break;

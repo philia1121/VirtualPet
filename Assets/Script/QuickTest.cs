@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using extOSC;
+using System.Linq;
+using System.Net;
+using UnityEngine.UI;
 
 public class QuickTest : MonoBehaviour
 {
-    public OSCReceiver Receiver;
     void Start()
     {
-        Debug.Log(Receiver.LocalHost);
+        Debug.Log("LocalIPv4: " + GetLocalIPv4());
+    }
+    public void Log()
+    {
+        Debug.Log("do something");
     }
 
-    // Update is called once per frame
-    void Update()
+    public string GetLocalIPv4()
     {
-        
+        return Dns.GetHostEntry(Dns.GetHostName()).AddressList.First( f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
     }
 }

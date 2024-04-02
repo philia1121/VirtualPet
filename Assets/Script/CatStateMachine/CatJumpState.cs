@@ -14,13 +14,12 @@ public class CatJumpState : CatBaseState
     Vector3 center, startRelCenter, targetRelCenter;
     public override void EnterState()
     {
-        Debug.Log("jump state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Jump;
+        _ctx.NextAnimation_str = "jump";
         _ctx.NextAnimationAwait = true;
         _ctx.UseAdditionalSpeedAdjust = true;
         _ctx.AdditionalSpeedAdjust = 1.5f;
-
+        _ctx.DragBanned = false;
         reachTarget = true;
         setTimer = false;
         reset = false;
@@ -49,7 +48,7 @@ public class CatJumpState : CatBaseState
                 }
                 else
                 {
-                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), catPos.z);
+                    randomTarget = new Vector3(Random.Range(_ctx.Boundary[0].position.x, _ctx.Boundary[1].position.x), Random.Range(_ctx.Boundary[0].position.y, _ctx.Boundary[1].position.y), Random.Range(_ctx.Boundary[0].position.z, _ctx.Boundary[1].position.z));
                 }
                 var dir = randomTarget - catPos;
                 _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing

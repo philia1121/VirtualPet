@@ -1371,7 +1371,6 @@ MonoBehaviour:
   - {fileID: 382601445}
   - {fileID: 324006781}
   FoodOffest: {x: -0.6, y: -1.94, z: 0}
-  CallCD: 0
 --- !u!1 &724797406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,7 +2701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8303500894383725085, guid: bdaee26d94b46c840ab25692db4568a1, type: 3}
       propertyPath: ManualStateNum
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8303500894383725085, guid: bdaee26d94b46c840ab25692db4568a1, type: 3}
       propertyPath: shorterSwitchDuration

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class DragAndDrop : MonoBehaviour
 {
-    private bool dragging = false;
-    private float distance;
+    public bool dragging = false;
     private float posZ;
 
-    void Start()
+    void Awake()
     {
         posZ = transform.position.z;
     }
@@ -16,11 +15,13 @@ public class DragAndDrop : MonoBehaviour
     void OnMouseDown()
     {
         dragging = true;
+        this.enabled = true;
     }
  
     void OnMouseUp()
     {
         dragging = false;
+        this.enabled = false;
     }
  
     void Update()

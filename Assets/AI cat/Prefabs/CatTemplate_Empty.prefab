@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3199388213570315077}
   - component: {fileID: 3199388213570315076}
   - component: {fileID: 7965814945501331729}
+  - component: {fileID: 1381849454572930450}
   m_Layer: 5
   m_Name: CatTemplate_Empty
   m_TagString: Untagged
@@ -82,36 +83,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3199388213570315078}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: faf499a850f3c4d40a0b82c0ba9b73ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ManualControl: 0
   ManualStateNum: 3
-  shorterSwitchDuration: 0
+  ShorterSwitchDuration: 0
+  ShorterDuration:
+  - 3
+  - 10
+  IllusionMode: 0
+  SendOSCMessage: 1
+  catInfo_Address: /Cat/Info
+  MyLoadAssets: {fileID: 1381849454572930450}
   catAppearance: {fileID: 3199388213570315077}
-  Eat: []
-  Idle: []
-  Jump: []
-  Knead: []
-  Observe: []
-  PostEat: []
-  PostKnead: []
-  PostScratch: []
-  PostWaitForEat: []
-  PreEat: []
-  PreKnead: []
-  PreScratch: []
-  PreWaitForEat: []
-  Scratch: []
-  Sit: []
-  SitDown: []
-  SitUp: []
-  Sleep: []
-  Stretch: []
-  WaitForEat: []
-  Walk: []
   Boundary:
   - {fileID: 0}
   - {fileID: 0}
@@ -236,3 +223,90 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1381849454572930450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199388213570315078}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210203e6da651e4428607541bf9c2a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainFolderPath: D:\NTUT\XRLab\Virtual Pet\AICat\
+  CatFolderName: 
+  ClipFolderName:
+  - eat
+  - idle
+  - jump
+  - knead
+  - observe
+  - postEat
+  - postKnead
+  - postScratch
+  - postWaitForEat
+  - preEat
+  - preKnead
+  - preScratch
+  - preWaitForEat
+  - scratch
+  - sit
+  - sitDown
+  - sitUp
+  - sleep
+  - stretch
+  - waitForEat
+  - walk
+  finishedCount: 0
+  loadingProgressText: {fileID: 0}
+  previewImage: {fileID: 0}
+  Eat: []
+  Idle: []
+  Jump: []
+  Knead: []
+  Observe: []
+  PostEat: []
+  PostKnead: []
+  PostScratch: []
+  PostWaitForEat: []
+  PreEat: []
+  PreKnead: []
+  PreScratch: []
+  PreWaitForEat: []
+  Scratch: []
+  Sit: []
+  SitDown: []
+  SitUp: []
+  Sleep: []
+  Stretch: []
+  WaitForEat: []
+  Walk: []
+  DoneLoading:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3199388213570315076}
+        m_TargetAssemblyTypeName: CatStateMachine, Assembly-CSharp
+        m_MethodName: GetLoadedAssets
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3199388213570315076}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2

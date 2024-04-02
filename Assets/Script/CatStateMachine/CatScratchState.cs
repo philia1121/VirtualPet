@@ -11,10 +11,10 @@ public class CatScratchState : CatBaseState
     public bool postAnimation = false; 
     public override void EnterState()
     {
-        Debug.Log("scratch state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.PreScratch;
+        _ctx.NextAnimation_str = "preScratch";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = false;
         preAnimation = false;
         postAnimation = false;
     }
@@ -24,7 +24,7 @@ public class CatScratchState : CatBaseState
         if(!_ctx.Transitioning && !preAnimation && _ctx.SimpleCurrentAnimationProgress == 1)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.Scratch;
+            _ctx.NextAnimation_str = "scratch";
             _ctx.NextAnimationAwait = true;
             preAnimation = true;
             _ctx.CallRandomSwitchState();
@@ -33,7 +33,7 @@ public class CatScratchState : CatBaseState
         if(!_ctx.Transitioning && !postAnimation && preAnimation && _ctx.TimeUp)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.PostScratch;
+            _ctx.NextAnimation_str = "postScratch";
             _ctx.NextAnimationAwait = true;
             postAnimation = true;
         }

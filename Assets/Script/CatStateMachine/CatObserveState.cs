@@ -15,10 +15,10 @@ public class CatObserveState : CatBaseState
     Vector3 center, startRelCenter, targetRelCenter;
     public override void EnterState()
     {
-        Debug.Log("observe state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.Observe;
+        _ctx.NextAnimation_str = "observe";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = true;
         if(_ctx.BallTransform.position.x >= _ctx.CatTransform.position.x)
         {
             _ctx.CatTransform.localScale = new Vector3(-1,1,1);
@@ -38,7 +38,7 @@ public class CatObserveState : CatBaseState
         if(!_ctx.Transitioning & !chasing)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.Jump;
+            _ctx.NextAnimation_str = "jump";
             _ctx.NextAnimationAwait = true;
             chasing = true;
         }
@@ -69,7 +69,6 @@ public class CatObserveState : CatBaseState
                     {
                         SwitchState(_factory.Idle());
                         _ctx.MyBall.SelfDestroy(true);
-                        Debug.Log("catch the ball");
                         return;
                     }
                 }

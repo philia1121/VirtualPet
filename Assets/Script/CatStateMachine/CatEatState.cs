@@ -10,26 +10,26 @@ public class CatEatState : CatBaseState
     bool preAnimation = false;
     bool postAnimation = false;
     bool eating = false;
-    bool walkToFood = false;
-    bool reachTarget = true;
     Vector3 Target = Vector3.zero;
+    bool setFoodState = false;
     public override void EnterState()
     {
         _ctx.Transitioning = true;
         if(_ctx.FoodOnStage)
         {
-            _ctx.NextAnimation = _ctx.Walk;
+            _ctx.NextAnimation_str = "walk";
         }
         else
         {
-            _ctx.NextAnimation = _ctx.PreWaitForEat;
+            _ctx.NextAnimation_str = "preWaitForEat";
         }
         _ctx.NextAnimationAwait = true;
         _ctx.CatTransform.localScale = new Vector3(1, 1, 1);
+        _ctx.DragBanned = true;
         preAnimation = false;
         postAnimation = false;
         eating = false;
-        walkToFood = false;
+        setFoodState = false;
     }
 
     public override void UpdateState()
@@ -39,7 +39,7 @@ public class CatEatState : CatBaseState
             if(!_ctx.Transitioning && !preAnimation && _ctx.SimpleCurrentAnimationProgress == 1)
             {
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.WaitForEat;
+                _ctx.NextAnimation_str = "waitForEat";
                 _ctx.NextAnimationAwait = true;
                 preAnimation = true;
                 _ctx.CallRandomSwitchState(); //Timer: Waiting for food
@@ -54,7 +54,7 @@ public class CatEatState : CatBaseState
                 {
                     _ctx.WaitForFood = false;
                     _ctx.Transitioning = true;
-                    _ctx.NextAnimation = _ctx.PreEat;
+                    _ctx.NextAnimation_str = "preEat";
                     _ctx.NextAnimationAwait = true;
                     preAnimation = false;
                     eating = true;
@@ -67,7 +67,7 @@ public class CatEatState : CatBaseState
                     postAnimation = true;
                     _ctx.WaitForFood = false;
                     _ctx.Transitioning = true;
-                    _ctx.NextAnimation = _ctx.PostWaitForEat;
+                    _ctx.NextAnimation_str = "postWaitForEat";
                     _ctx.NextAnimationAwait = true;
                 }
             }
@@ -75,10 +75,10 @@ public class CatEatState : CatBaseState
         else if(!eating & _ctx.FoodOnStage) // walk to the food already on stage
         {   
             var catPos = _ctx.CatTransform.position;
+            Target = _ctx.MyCatFood.transform.position + new Vector3(-0.6f, -1.94f, 0)*-1;
             if(!_ctx.Transitioning)
             {
-                Target = _ctx.MyCatFood.transform.position + new Vector3(-0.6f, -1.94f, 0)*-1;
-                reachTarget = false;
+                Debug.Log("Walk To Food");
                 var dir = Target - catPos;
                 _ctx.CatTransform.localScale = (dir.x > 0) ? new Vector3(-1, 1, 1): new Vector3(1, 1, 1); //facing
 
@@ -87,10 +87,11 @@ public class CatEatState : CatBaseState
             
             if(Vector3.Distance(catPos, Target) < 0.05f) //reach the food
             {
+                Debug.Log("reach food");
                 _ctx.CatTransform.localScale = new Vector3(1, 1, 1);
                 _ctx.WaitForFood = false;
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.PreEat;
+                _ctx.NextAnimation_str = "preEat";
                 _ctx.NextAnimationAwait = true;
                 preAnimation = false;
                 eating = true;
@@ -101,10 +102,10 @@ public class CatEatState : CatBaseState
             if(!_ctx.Transitioning && !preAnimation && _ctx.SimpleCurrentAnimationProgress == 1) //start eating
             {
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.Eat;
+                _ctx.NextAnimation_str = "eat";
                 _ctx.NextAnimationAwait = true;
                 preAnimation = true;
-                _ctx.MyCatFood.EatCatFood();
+                _ctx.MyCatFood.EatCatFood(1);
                 _ctx.CallRandomSwitchState(); //Timer: Eating
 
                 _ctx.Audio_Eating();
@@ -112,7 +113,7 @@ public class CatEatState : CatBaseState
             if(!_ctx.Transitioning && !postAnimation && preAnimation && _ctx.TimeUp) // finished
             {
                 _ctx.Transitioning = true;
-                _ctx.NextAnimation = _ctx.PostEat;
+                _ctx.NextAnimation_str = "postEat";
                 _ctx.NextAnimationAwait = true;
                 postAnimation = true;
 
@@ -120,7 +121,12 @@ public class CatEatState : CatBaseState
             }
             if(postAnimation & _ctx.Transitioning & _ctx.SimpleCurrentAnimationProgress == 1) // food animation
             {
-                _ctx.MyCatFood.EatCatFood();
+                if(!setFoodState)
+                {
+                    setFoodState = true;
+                    _ctx.MyCatFood.EatCatFood(0);
+                    Debug.Log("Done eating by " + _ctx.name);
+                }
             }
         }
 

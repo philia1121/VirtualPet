@@ -11,10 +11,10 @@ public class CatSleepState : CatBaseState
     bool postAnimation = false;
     public override void EnterState()
     {
-        Debug.Log("sleep state enter");
         _ctx.Transitioning = true;
-        _ctx.NextAnimation = _ctx.SitDown;
+        _ctx.NextAnimation_str = "sitDown";
         _ctx.NextAnimationAwait = true;
+        _ctx.DragBanned = false;
         preAnimation = false;
         postAnimation = false;
     }
@@ -24,7 +24,7 @@ public class CatSleepState : CatBaseState
         if(!_ctx.Transitioning && !preAnimation && _ctx.SimpleCurrentAnimationProgress == 1)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.Sleep;
+            _ctx.NextAnimation_str = "sleep";
             _ctx.NextAnimationAwait = true;
             preAnimation = true;
             _ctx.CallRandomSwitchState();
@@ -35,7 +35,7 @@ public class CatSleepState : CatBaseState
         if(!_ctx.Transitioning && !postAnimation && preAnimation && _ctx.TimeUp)
         {
             _ctx.Transitioning = true;
-            _ctx.NextAnimation = _ctx.SitUp;
+            _ctx.NextAnimation_str = "sitUp";
             _ctx.NextAnimationAwait = true;
             postAnimation = true;
         }

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    float duration = 60f;
     bool durationCheck = true;
     float speed = 15f;
     float rotateSpeed = 800f;
-    public Vector2[] boundary = new Vector2[2];
+    public Vector3[] boundary = new Vector3[2];
     // public void Start()
     // {
     //     Invoke("SelfDestroy", duration);
@@ -21,10 +20,10 @@ public class Ball : MonoBehaviour
 
     public IEnumerator Rolling()
     {
-        // TODO: should be outside the boundary
-        var target = new Vector3(Random.Range(boundary[0].x, boundary[1].x), Random.Range(boundary[0].y, boundary[1].y), 0);
-        target = (Random.Range(-1,1f) > 0) ? target : new Vector3(target.x* -1, target.y, target.z);
-        target = (Random.Range(-1,1f) > 0) ? target : new Vector3(target.x, target.y* -1, target.z);
+        // now will only move inside the boundary
+        var target = new Vector3(Random.Range(boundary[0].x, boundary[1].x), Random.Range(boundary[0].y, boundary[1].y), Random.Range(boundary[0].z, boundary[1].z));
+        // target = (Random.Range(-1,1f) > 0) ? target : new Vector3(target.x* -1, target.y, target.z);
+        // target = (Random.Range(-1,1f) > 0) ? target : new Vector3(target.x, target.y* -1, target.z);
         while(true)
         {
             this.transform.position = Vector3.MoveTowards(this.transform.position, target, speed* Time.deltaTime);
